@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <string.h>
+void eliminateLeftFactoring(char grammar[][100], int n) {
+    int i, j;
+    char temp[100], factored[100];
+
+    for (i = 0; i < n; i++) {
+
+        for (j = i + 1; j < n; j++) {
+            if (grammar[i][0] == grammar[j][0]) {
+            
+                int k = 0;
+                while (grammar[i][k + 3] == grammar[j][k + 3]) {
+                    temp[k] = grammar[i][k + 3];
+                    k++;
+                }
+                temp[k] = '\0';
+
+                strcpy(factored, grammar[i]);
+                factored[k + 3] = '\0';
+                strcat(factored, "'");
+                strcpy(grammar[i], factored);
+
+                strcpy(factored, temp);
+                strcat(factored, grammar[j] + k + 3);
+                strcat(factored, "'");
+                strcpy(grammar[j], factored);
+            }
+        }
+    }
+}
+
+void printGrammar(char grammar[][100], int n) {
+    int i;
+    for (i = 0; i < n; i++) {
+        printf("%s\n", grammar[i]);
+    }
+}
+
+int main() {
+    int n;
+    printf("Enter the number of grammar productions: ");
+    scanf("%d", &n);
+
+    char grammar[n][100];
+    printf("Enter the grammar productions (one per line):\n");
+    for (int i = 0; i < n; i++) {
+        scanf(" %[^\n]", grammar[i]);
+    }
+
+    printf("Original Grammar:\n");
+    printGrammar(grammar, n);
+
+    eliminateLeftFactoring(grammar, n);
+
+    printf("\nGrammar after eliminating left factoring:\n");
+    printGrammar(grammar, n);
+    return 0;
+}
